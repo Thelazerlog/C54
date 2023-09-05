@@ -28,7 +28,11 @@ public class ListeActivity extends AppCompatActivity {
         liste = findViewById(R.id.listeMemo);
         liste.setAdapter(arrayAdapter);
     }
-    public ArrayList<String> recupererMemo(){
-         return SingletonMemos.getInstance(this).getListeMemos();
+    public ArrayList<String> recupererMemo() {
+        try {
+            return SingletonMemos.getInstance(this).getListeMemos();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

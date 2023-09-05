@@ -51,6 +51,8 @@ public class AjouterActivity extends AppCompatActivity {
             SingletonMemos.getInstance(this).serialiserListe();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity {
     private Intent listeActivity;
     private Intent ajouterActivity;
@@ -33,6 +35,12 @@ public class MainActivity extends AppCompatActivity {
         liste.setOnClickListener(ec);
         ajouter.setOnClickListener(ec);
         quitter.setOnClickListener(ec);
+
+        try {
+            SingletonMemos.getInstance(this).getListeMemos();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
