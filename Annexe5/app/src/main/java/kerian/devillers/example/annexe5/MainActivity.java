@@ -38,14 +38,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-    protected Vector<HashMap<String, String>> lireInfoChansons() throws IOException, ClassNotFoundException {
-        Vector<HashMap<String, String>> listeInfoChansons = new Vector<>();
+    protected Vector<HashMap<String, Object>> lireInfoChansons() throws IOException, ClassNotFoundException {
+        Vector<HashMap<String, Object>> listeInfoChansons = new Vector<>();
         boolean loop = true;
         ObjectInputStream ois = new ObjectInputStream(getResources().openRawResource(R.raw.palmares));
 
         while(loop == true){
             try {
-                listeInfoChansons.add((HashMap<String, String>) ois.readObject());
+                listeInfoChansons.add((HashMap<String, Object>) ois.readObject());
             }catch (EOFException e){
                 loop = false;
             }
