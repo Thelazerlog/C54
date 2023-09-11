@@ -33,7 +33,7 @@ public class AccueilActivity extends AppCompatActivity {
         try {
             utilisateur = (Utilisateur) savedInstanceState.getSerializable("util");
             if(utilisateur != null)
-            texteBienvenue.setText("Bonjour " + utilisateur.getPrenom() + " " + utilisateur.getNom()  + "!");
+                texteBienvenue.setText("Bonjour " + utilisateur.getPrenom() + " " + utilisateur.getNom()  + "!");
         }catch (NullPointerException nullPointerException){
             texteBienvenue.setText("Bonjour!");
         }
