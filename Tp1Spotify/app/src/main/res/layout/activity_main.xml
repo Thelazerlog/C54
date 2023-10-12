@@ -78,4 +78,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/title" />
 
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/arrow_down_float"
+        tools:layout_editor_absoluteX="30dp"
+        tools:layout_editor_absoluteY="418dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
