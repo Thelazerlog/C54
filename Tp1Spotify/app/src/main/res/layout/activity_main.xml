@@ -11,10 +11,13 @@
         android:id="@+id/nomChanson"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.656" />
 
     <Button
         android:id="@+id/bouttonPlay"
@@ -26,13 +29,36 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.669" />
+        app:layout_constraintVertical_bias="0.855" />
+
+    <ImageView
+        android:id="@+id/skipBack"
+        android:layout_width="24dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="108dp"
+        android:layout_marginBottom="108dp"
+        android:rotation="90"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/arrow_down_float" />
+
+    <ImageView
+        android:id="@+id/skipForward"
+        android:layout_width="24dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="276dp"
+        android:layout_marginBottom="108dp"
+        android:rotation="270"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/arrow_down_float" />
 
     <TextView
         android:id="@+id/nomArtiste"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="320dp"
+        android:layout_marginBottom="184dp"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -40,11 +66,11 @@
 
     <ImageView
         android:id="@+id/songImage"
-        android:layout_width="144dp"
-        android:layout_height="140dp"
-        android:layout_marginTop="268dp"
+        android:layout_width="215dp"
+        android:layout_height="162dp"
+        android:layout_marginTop="208dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.55"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_launcher_background" />
@@ -53,29 +79,31 @@
         android:id="@+id/songTime"
         android:layout_width="150dp"
         android:layout_height="20dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="24dp"
+        android:progress="100"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.409"
+        app:layout_constraintHorizontal_bias="0.436"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/songImage" />
 
-    <TextView
-        android:id="@+id/textTimeSong"
-        android:layout_width="50dp"
-        android:layout_height="20dp"
-        android:layout_marginBottom="290dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/songTime" />
-
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/titre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/title" />
+
+    <Chronometer
+        android:id="@+id/chronometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:countDown="false"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/songTime"
+        app:layout_constraintTop_toBottomOf="@+id/songImage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
