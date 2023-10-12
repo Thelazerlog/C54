@@ -6,15 +6,8 @@ import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.PlayerApi;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
-import com.spotify.protocol.client.CallResult;
 import com.spotify.protocol.types.ImageUri;
-import com.spotify.protocol.types.PlayerState;
 import com.spotify.protocol.types.Track;
-import com.spotify.protocol.types.Uri;
-
-import java.util.concurrent.atomic.AtomicReference;
-
-import javax.security.auth.callback.Callback;
 
 public class SpotifyDiffuseur{
     private static SpotifyDiffuseur instance;
@@ -27,7 +20,11 @@ public class SpotifyDiffuseur{
     private String nom;
     private String artiste;
     private ImageUri image;
-    private boolean isPlaying;
+
+    private double songLenght;
+    private long songProgress;
+
+    private boolean isPlaying = false;
     public static SpotifyDiffuseur getInstance(Context context) {
         if (instance == null)
             instance = new SpotifyDiffuseur(context);
@@ -65,13 +62,16 @@ public class SpotifyDiffuseur{
     }
 
     public void play(){
-        playerApi.play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL");
+        isPlaying = true;
+        playerApi.play("spotify:playlist:37i9dQZF1DWYMokBiQj5qF");
     }
     public void pause(){
+        isPlaying = false;
         playerApi.pause();
     }
-    public void move(float nbSecondes){
-
+    public void move(long postion){
+        songProgress = postion;
+        playerApi.seekTo(songProgress);
     }
     public boolean isPlaying(){
         return isPlaying;
@@ -83,16 +83,23 @@ public class SpotifyDiffuseur{
                 nom = track.name;
                 artiste = track.artist.name;
                 image = track.imageUri;
-                //isPlaying = track;
+                songLenght = track.duration;
+                songProgress = playerState.playbackPosition;
             }
         });
-
     }
     public String getNomChanson(){
         return nom;
     }
     public String getNomArtiste(){
         return artiste;
+    }
+    public double getSongLenght(){
+        return songLenght;
+    }
+
+    public long getSongProgress() {
+        return songProgress;
     }
 
     public ImageUri getCouvertureChanson(){
