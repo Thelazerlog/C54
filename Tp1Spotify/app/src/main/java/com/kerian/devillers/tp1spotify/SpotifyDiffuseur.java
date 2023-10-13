@@ -22,15 +22,16 @@ public class SpotifyDiffuseur{
     private String artiste;
     private Bitmap image;
 
-    private double songLenght;
-    private long songProgress;
+    private double songLenght; //Longeur en milisecondes
+    private long songProgress; //Place dans la chanson en milisecondes
 
-    private boolean songChanged = false;
+    private boolean songChanged = false; //Si une chanson à été changée et que MainActivity n'as pas encore géré le changement
 
-    private boolean connected = false;
+    private boolean connected = false; //Si la connection a spotify est établie
 
-    private String curSong;
-    private boolean isPlaying = false;
+    private String curSong; //Uri de la chanson en train de jouer
+    private boolean isPlaying = false; //Si une chanson est en train de jouer
+
     public static SpotifyDiffuseur getInstance(Context context) {
         if (instance == null)
             instance = new SpotifyDiffuseur(context);
@@ -60,7 +61,7 @@ public class SpotifyDiffuseur{
 
             @Override
             public void onFailure(Throwable throwable) {
-                System.out.println("Probleme de connection");
+                System.out.println(throwable.getMessage());
             }
         });
     }
@@ -78,7 +79,7 @@ public class SpotifyDiffuseur{
         isPlaying = false;
         playerApi.pause();
     }
-    public void move(int postion){
+    public void move(int postion){ //Change le progress de la chason à la position donnée en miliseconds
         this.updateInfo();
         songProgress = postion;
         playerApi.seekTo(postion);
@@ -86,29 +87,35 @@ public class SpotifyDiffuseur{
     public boolean isPlaying(){
         return isPlaying;
     }
+
+    //Met a jour les informations du diffuseur sur la chanson jouée
     public void updateInfo(){
         playerApi.subscribeToPlayerState().setEventCallback(playerState -> {
             final Track track = playerState.track;
             if (track != null) {
-                nom = track.name;
-                artiste = track.artist.name;
-                appRemote.getImagesApi().getImage(track.imageUri).setResultCallback(
-                        new CallResult.ResultCallback<Bitmap>() {
-                            @Override
-                            public void onResult(Bitmap data) {
-                                image = data;
+                if (songChanged){ //Valeurs qui changent seulment si la chanson à changée
+                    nom = track.name;
+                    artiste = track.artist.name;
+                    appRemote.getImagesApi().getImage(track.imageUri).setResultCallback(
+                            new CallResult.ResultCallback<Bitmap>() {
+                                @Override
+                                public void onResult(Bitmap data) {
+                                    image = data;
+                                }
                             }
-                        }
-                );
-                songLenght = track.duration;
+                    );
+                    songLenght = track.duration;
+                    curSong = playerState.track.uri;
+                }
+
                 songProgress = playerState.playbackPosition;
-                if (!playerState.track.uri.equals(curSong) && curSong != null){
+                if (!playerState.track.uri.equals(curSong) && curSong != null){ //Verifie si la chanson qui joue est celle qui jouais avant ce tic
                     songChanged = true;
                 }
-                curSong = playerState.track.uri;
             }
         });
     }
+
     public String getNomChanson(){
         return nom;
     }
@@ -118,11 +125,9 @@ public class SpotifyDiffuseur{
     public double getSongLenght(){
         return songLenght;
     }
-
     public long getSongProgress() {
         return songProgress;
     }
-
     public Bitmap getCouvertureChanson(){
         return image;
     }
@@ -132,19 +137,14 @@ public class SpotifyDiffuseur{
     public void previousSong(){
         playerApi.skipPrevious();
     }
-
     public boolean songChanged(){
         return songChanged;
     }
-
-
     public void resetSongChanged(){
         songChanged = false;
     }
-
     public boolean isConnected(){
         return connected;
     }
-
 }
 

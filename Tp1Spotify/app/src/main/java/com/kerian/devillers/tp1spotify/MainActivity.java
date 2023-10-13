@@ -42,10 +42,12 @@ public class MainActivity extends AppCompatActivity {
         skipBack = findViewById(R.id.skipBack);
         skipForward = findViewById(R.id.skipForward);
 
-        chrono.start();
+        chrono.start(); //Afin de faire que onChronometerTick commence à être appelé
+
         chrono.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
+                //Empêche onChronometerTick d'être appelé avant que updateInfo est fini au cas ou il faut changer la valeur du chrono
                 chronometer.setOnChronometerTickListener(null);
                 updateInfo();
                 chronometer.setOnChronometerTickListener(this);
@@ -91,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                instance.move(seekBar.getProgress());
+                instance.move(seekBar.getProgress()); //Marche pas, peut être besoin de premium pour bouger
             }
         });
     }
@@ -99,9 +101,9 @@ public class MainActivity extends AppCompatActivity {
         if (instance.isConnected()){
             instance.updateInfo();
             if (asCommence){
-                if (instance.songChanged()){
+                if (instance.songChanged()){ //Verfie si la chanson as été changée il y as peu
                     newSong();
-                    instance.resetSongChanged();
+                    instance.resetSongChanged(); //Dit a SpotifyDiffuseur que le changement de chanson à été pris en compte
                 }
                 updateSeekBar();
             }
@@ -121,15 +123,18 @@ public class MainActivity extends AppCompatActivity {
     private void updateSeekBar(){
         tempsChanson.setProgress((int) instance.getSongProgress());
     }
+    //Est appelé apres un changement de chanson
     private void newSong(){
         afficherInfoBase();
         tempsChanson.setMax((int) instance.getSongLenght());
         resetChrono();
     }
+    //Met le temps sur le chronometre égal au progress de la chanson
     private void setChrono() {
         chrono.setBase(SystemClock.elapsedRealtime() - instance.getSongProgress());
     }
 
+    //Est appelé une fois à l'ouverture de l'aplication afin d'afficher les informations au cas ou de la musique jouais déja
     private void openApp(){
         afficherInfoBase();
         tempsChanson.setMax((int) instance.getSongLenght());
