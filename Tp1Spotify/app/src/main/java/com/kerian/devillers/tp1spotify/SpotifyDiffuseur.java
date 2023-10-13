@@ -1,12 +1,13 @@
 package com.kerian.devillers.tp1spotify;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.PlayerApi;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
-import com.spotify.protocol.types.ImageUri;
+import com.spotify.protocol.client.CallResult;
 import com.spotify.protocol.types.Track;
 
 public class SpotifyDiffuseur{
@@ -19,11 +20,16 @@ public class SpotifyDiffuseur{
     private static final String REDIRECT_URI = "com.kerian.devillers.tp1spotify://callback";
     private String nom;
     private String artiste;
-    private ImageUri image;
+    private Bitmap image;
 
     private double songLenght;
     private long songProgress;
 
+    private boolean songChanged = false;
+
+    private boolean connected = false;
+
+    private String curSong;
     private boolean isPlaying = false;
     public static SpotifyDiffuseur getInstance(Context context) {
         if (instance == null)
@@ -33,7 +39,7 @@ public class SpotifyDiffuseur{
 
     private SpotifyDiffuseur(Context context) {
         this.context = context;
-        connect();
+        this.connect();
     }
 
     private void connect(){
@@ -54,11 +60,14 @@ public class SpotifyDiffuseur{
 
             @Override
             public void onFailure(Throwable throwable) {
+                System.out.println("Probleme de connection");
             }
         });
     }
 
     private void connected() {
+        this.updateInfo();
+        connected = true;
     }
 
     public void play(){
@@ -69,9 +78,10 @@ public class SpotifyDiffuseur{
         isPlaying = false;
         playerApi.pause();
     }
-    public void move(long postion){
+    public void move(int postion){
+        this.updateInfo();
         songProgress = postion;
-        playerApi.seekTo(songProgress);
+        playerApi.seekTo(postion);
     }
     public boolean isPlaying(){
         return isPlaying;
@@ -82,9 +92,20 @@ public class SpotifyDiffuseur{
             if (track != null) {
                 nom = track.name;
                 artiste = track.artist.name;
-                image = track.imageUri;
+                appRemote.getImagesApi().getImage(track.imageUri).setResultCallback(
+                        new CallResult.ResultCallback<Bitmap>() {
+                            @Override
+                            public void onResult(Bitmap data) {
+                                image = data;
+                            }
+                        }
+                );
                 songLenght = track.duration;
                 songProgress = playerState.playbackPosition;
+                if (!playerState.track.uri.equals(curSong) && curSong != null){
+                    songChanged = true;
+                }
+                curSong = playerState.track.uri;
             }
         });
     }
@@ -102,7 +123,7 @@ public class SpotifyDiffuseur{
         return songProgress;
     }
 
-    public ImageUri getCouvertureChanson(){
+    public Bitmap getCouvertureChanson(){
         return image;
     }
     public void nextSong(){
@@ -110,6 +131,19 @@ public class SpotifyDiffuseur{
     }
     public void previousSong(){
         playerApi.skipPrevious();
+    }
+
+    public boolean songChanged(){
+        return songChanged;
+    }
+
+
+    public void resetSongChanged(){
+        songChanged = false;
+    }
+
+    public boolean isConnected(){
+        return connected;
     }
 
 }
