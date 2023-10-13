@@ -11,6 +11,7 @@
         android:id="@+id/nomChanson"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/coda"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,6 +24,7 @@
         android:id="@+id/bouttonPlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/coda"
         android:text="Play"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -58,6 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="184dp"
+        android:fontFamily="@font/coda"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -102,8 +105,17 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
         android:countDown="false"
+        android:fontFamily="@font/coda"
         android:textSize="24sp"
         app:layout_constraintStart_toEndOf="@+id/songTime"
         app:layout_constraintTop_toBottomOf="@+id/songImage" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="40dp"
+        android:layout_height="34dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/playlists" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

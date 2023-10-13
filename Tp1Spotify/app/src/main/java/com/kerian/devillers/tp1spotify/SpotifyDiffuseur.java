@@ -93,25 +93,23 @@ public class SpotifyDiffuseur{
         playerApi.subscribeToPlayerState().setEventCallback(playerState -> {
             final Track track = playerState.track;
             if (track != null) {
-                if (songChanged){ //Valeurs qui changent seulment si la chanson à changée
-                    nom = track.name;
-                    artiste = track.artist.name;
-                    appRemote.getImagesApi().getImage(track.imageUri).setResultCallback(
-                            new CallResult.ResultCallback<Bitmap>() {
-                                @Override
-                                public void onResult(Bitmap data) {
-                                    image = data;
-                                }
+                nom = track.name;
+                artiste = track.artist.name;
+                appRemote.getImagesApi().getImage(track.imageUri).setResultCallback(
+                        new CallResult.ResultCallback<Bitmap>() {
+                            @Override
+                            public void onResult(Bitmap data) {
+                                image = data;
                             }
-                    );
-                    songLenght = track.duration;
-                    curSong = playerState.track.uri;
-                }
-
+                        }
+                );
+                songLenght = track.duration;
                 songProgress = playerState.playbackPosition;
+
                 if (!playerState.track.uri.equals(curSong) && curSong != null){ //Verifie si la chanson qui joue est celle qui jouais avant ce tic
                     songChanged = true;
                 }
+                curSong = playerState.track.uri;
             }
         });
     }
