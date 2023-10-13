@@ -1,7 +1,12 @@
 package com.kerian.devillers.tp1spotify;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
@@ -25,6 +30,11 @@ public class MainActivity extends AppCompatActivity {
 
     private long tempsPause = 0;
     private boolean asCommence = false;
+    private TextView lienSite;
+    private ImageView pagePlaylists;
+    private androidx.activity.result.ActivityResultLauncher<Intent> launcher;
+
+
 
 
     @Override
@@ -41,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
         chrono = findViewById(R.id.chronometer);
         skipBack = findViewById(R.id.skipBack);
         skipForward = findViewById(R.id.skipForward);
+        lienSite = findViewById(R.id.lienSite);
+        pagePlaylists = findViewById(R.id.pagePlaylists);
+
 
         chrono.start(); //Afin de faire que onChronometerTick commence à être appelé
 
@@ -94,6 +107,30 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 instance.move(seekBar.getProgress()); //Marche pas, peut être besoin de premium pour bouger
+            }
+        });
+
+        lienSite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url= "https://www.cyberpunk.net/ca/fr";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
+            }
+        });
+
+        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getResultCode() == RESULT_OK){
+                    //instance.setPlaylist = result.getData().getSerializableExtra("choix");
+                }
+            }
+        });
+        pagePlaylists.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launcher.launch(new Intent(MainActivity.this, PlaylistsActivity.class));
             }
         });
     }

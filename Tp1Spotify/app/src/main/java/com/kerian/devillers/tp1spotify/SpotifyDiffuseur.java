@@ -9,6 +9,7 @@ import com.spotify.android.appremote.api.PlayerApi;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
 import com.spotify.protocol.client.CallResult;
 import com.spotify.protocol.types.Track;
+import com.spotify.protocol.types.Uri;
 
 public class SpotifyDiffuseur{
     private static SpotifyDiffuseur instance;
@@ -31,6 +32,8 @@ public class SpotifyDiffuseur{
 
     private String curSong; //Uri de la chanson en train de jouer
     private boolean isPlaying = false; //Si une chanson est en train de jouer
+
+    private String activePlaylist = "spotify:playlist:37i9dQZF1DWYMokBiQj5qF";
 
     public static SpotifyDiffuseur getInstance(Context context) {
         if (instance == null)
@@ -73,7 +76,7 @@ public class SpotifyDiffuseur{
 
     public void play(){
         isPlaying = true;
-        playerApi.play("spotify:playlist:37i9dQZF1DWYMokBiQj5qF");
+        playerApi.play(activePlaylist);
     }
     public void pause(){
         isPlaying = false;
