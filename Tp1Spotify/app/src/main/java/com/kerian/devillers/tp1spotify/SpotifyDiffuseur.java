@@ -100,10 +100,10 @@ public class SpotifyDiffuseur{
                             }
                     );
                     songLenght = track.duration;
-                    songProgress = playerState.playbackPosition;
                     songChanged = true;
                     curSong = playerState.track.uri;
                 }
+                songProgress = playerState.playbackPosition;
             }
         });
     }

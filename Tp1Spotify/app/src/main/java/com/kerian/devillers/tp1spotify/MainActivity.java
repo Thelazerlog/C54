@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         pagePlaylists = findViewById(R.id.pagePlaylists);
 
 
-        chrono.start(); //Afin de faire que onChronometerTick commence à être appelé
+        updateInfo(); //Afin de faire que onChronometerTick commence à être appelé
 
         //Ticks
         chrono.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
@@ -68,14 +68,13 @@ public class MainActivity extends AppCompatActivity {
                 if (instance.isPlaying()){
                     instance.pause();
                     chrono.stop();
-                    tempsPause = chrono.getBase() - SystemClock.elapsedRealtime();
+                    //tempsPause = chrono.getBase() - SystemClock.elapsedRealtime();
                 }
                 else{
                     instance.play();
-                    if (!chrono.isActivated()){ //Si une chanson n'est pas déja en train de jouer
-                        chrono.setBase(SystemClock.elapsedRealtime() + tempsPause);
-                        chrono.start();
-                    }
+                    //chrono.setBase(SystemClock.elapsedRealtime() + tempsPause);
+                    chrono.setBase(SystemClock.elapsedRealtime() - instance.getSongProgress());
+                    chrono.start();
                 }
             }
         });
@@ -159,11 +158,11 @@ public class MainActivity extends AppCompatActivity {
     private void newSong(){
         nomChanson.setText(instance.getNomChanson());
         nomArtiste.setText(instance.getNomArtiste());
-        imageChanson.setImageBitmap(instance.getCouvertureChanson());
         tempsChanson.setMax((int) instance.getSongLenght());
         //Met pas a zero au cas ou une chanson jouais déja a ouverture de l'app ou changement de playlist
         setChrono();
         tempsChanson.setProgress((int) instance.getSongProgress());
+        imageChanson.setImageBitmap(instance.getCouvertureChanson());
     }
     //Met le temps sur le chronometre égal au progress de la chanson
     private void setChrono() {
