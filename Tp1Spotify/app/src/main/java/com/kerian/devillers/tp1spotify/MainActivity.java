@@ -24,17 +24,12 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageChanson;
     private SeekBar tempsChanson;
     private Chronometer chrono;
-
     private ImageView skipBack;
     private ImageView skipForward;
-
     private long tempsPause = 0;
     private TextView lienSite;
     private ImageView pagePlaylists;
     private androidx.activity.result.ActivityResultLauncher<Intent> launcher;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +136,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public void onStop() {
+        super.onStop();
+        instance.pause();
+    }
+
     private void updateInfo(){
         if (instance.isConnected()){
             instance.updateInfo();
@@ -151,17 +152,14 @@ public class MainActivity extends AppCompatActivity {
             updateSeekBar(); //Ajoute la seconde qui est passée
         }
     }
-    private void afficherInfoBase(){
-        nomChanson.setText(instance.getNomChanson());
-        nomArtiste.setText(instance.getNomArtiste());
-        imageChanson.setImageBitmap(instance.getCouvertureChanson());
-    }
     private void updateSeekBar(){
         tempsChanson.setProgress(tempsChanson.getProgress() + 1000);
     }
     //Est appelé après un changement de chanson
     private void newSong(){
-        afficherInfoBase();
+        nomChanson.setText(instance.getNomChanson());
+        nomArtiste.setText(instance.getNomArtiste());
+        imageChanson.setImageBitmap(instance.getCouvertureChanson());
         tempsChanson.setMax((int) instance.getSongLenght());
         //Met pas a zero au cas ou une chanson jouais déja a ouverture de l'app ou changement de playlist
         setChrono();

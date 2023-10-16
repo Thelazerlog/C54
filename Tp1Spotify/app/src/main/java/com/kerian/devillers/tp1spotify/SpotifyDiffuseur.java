@@ -13,7 +13,6 @@ import com.spotify.protocol.types.Uri;
 
 public class SpotifyDiffuseur{
     private static SpotifyDiffuseur instance;
-
     private PlayerApi playerApi;
     private  SpotifyAppRemote appRemote;
     private Context context;
@@ -22,17 +21,12 @@ public class SpotifyDiffuseur{
     private String nom;
     private String artiste;
     private Bitmap image;
-
     private double songLenght; //Longeur en milisecondes
     private long songProgress; //Place dans la chanson en milisecondes
-
     private boolean songChanged = false; //Si une chanson à été changée et que MainActivity n'as pas encore géré le changement
-
     private boolean connected = false; //Si la connection a spotify est établie
-
     private String curSong = "aucune"; //Uri de la chanson en train de jouer
     private boolean isPlaying = false; //Si une chanson est en train de jouer
-
     private String activePlaylist = "spotify:playlist:37i9dQZF1DWYMokBiQj5qF";
 
     public static SpotifyDiffuseur getInstance(Context context) {
@@ -73,7 +67,6 @@ public class SpotifyDiffuseur{
         this.updateInfo();
         connected = true;
     }
-
     public void play(){
         isPlaying = true;
         playerApi.play(activePlaylist);
@@ -90,7 +83,6 @@ public class SpotifyDiffuseur{
     public boolean isPlaying(){
         return isPlaying;
     }
-
     //Met a jour les informations du diffuseur sur la chanson jouée
     public void updateInfo(){
         playerApi.subscribeToPlayerState().setEventCallback(playerState -> {
@@ -115,7 +107,6 @@ public class SpotifyDiffuseur{
             }
         });
     }
-
     public String getNomChanson(){
         return nom;
     }
@@ -146,7 +137,6 @@ public class SpotifyDiffuseur{
     public boolean isConnected(){
         return connected;
     }
-
     public void setActivePlaylist(String activePlaylist) {
         this.activePlaylist = activePlaylist; //Met la playlise voue comme active
         this.play();
