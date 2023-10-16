@@ -2,13 +2,17 @@ package com.kerian.devillers.tp1spotify;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -18,6 +22,17 @@ public class PlaylistsActivity extends AppCompatActivity {
     Intent intent;
     String choix;
     SimpleAdapter adapteurListe;
+
+    Playlist playlist1;
+    Playlist playlist2;
+    Playlist playlist3;
+    Playlist playlist4;
+    Playlist playlist5;
+    Playlist playlist6;
+    Playlist playlist7;
+
+    Playlist[] playlists;
+    Vector<HashMap<String, Object>> infoPlatlists;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,80 +41,51 @@ public class PlaylistsActivity extends AppCompatActivity {
         listPlaylists = findViewById(R.id.listPlaylists);
         ec = new Ecouteur();
 
-        Vector<HashMap<String, Object>> infoPlatlists = new Vector<>();
+        //Si il faut rajouter une playlist just créer un objet et le mettre dans playlists
+        playlist1 = new Playlist("Cyberpunk 2077 Official Playlist", 180, 50, R.drawable.playlist1, "spotify:playlist:37i9dQZF1DWYMokBiQj5qF");
+        playlist2 = new Playlist("Cyberpunk 2077-Original Score", 130, 37, R.drawable.playlist2, "spotify:album:1B2QrHbMox8vPXUY7rXAFp");
+        playlist3 = new Playlist("Cyberpunk 2077: Phantom Liberty (Original Score)",55,15, R.drawable.playlist3, "spotify:album:0YmI7KdXpmTikNmFHVMilu");
+        playlist4 = new Playlist("Cyberpunk 2077: Radio, Vol. 1 (Original Soundtrack",37,10, R.drawable.playlist4, "spotify:album:4IzV5XnSOvOBZ2z9WKsi3W");
+        playlist5 = new Playlist("Cyberpunk 2077: Radio, Vol. 2 (Original Soundtrack",35,9, R.drawable.playlist5, "spotify:album:1VGVJdmvOSRK2w9RKXk18A");
+        playlist6 = new Playlist("Cyberpunk 2077: Radio, Vol. 3 (Original Soundtrack",40 ,12, R.drawable.playlist6, "spotify:album:4L3cV9CUK0MVXUXLYkWY23");
+        playlist7 = new Playlist("Cyberpunk 2077: Radio, Vol. 4 (Original Soundtrack",48,5, R.drawable.playlist7, "spotify:album:3j8Mg3DogmEVXNYrHbDWeX");
 
-        HashMap<String, Object> un = new HashMap();
-        un.put("name", "1");
-        un.put("nbTracks", "1");
-        un.put("image", "1");
-        un.put("lien", "spotify:playlist:37i9dQZF1DWYMokBiQj5qF");
+        playlists = new Playlist[]{playlist1, playlist2, playlist3, playlist4, playlist5, playlist6, playlist7};
 
-        HashMap<String, Object> deux = new HashMap();
-        deux.put("name", "2");
-        deux.put("nbTracks", "2");
-        deux.put("image", "2");
-        deux.put("lien", "spotify:album:1B2QrHbMox8vPXUY7rXAFp");
-
-        HashMap<String, Object> trois = new HashMap();
-        trois.put("name", "3");
-        trois.put("nbTracks", "3");
-        trois.put("image", "3");
-        trois.put("lien", "spotify:album:0YmI7KdXpmTikNmFHVMilu");
-
-        HashMap<String, Object> quatre = new HashMap();
-        quatre.put("name", "4");
-        quatre.put("nbTracks", "4");
-        quatre.put("image", "4");
-        quatre.put("lien", "spotify:album:4IzV5XnSOvOBZ2z9WKsi3W");
-
-        HashMap<String, Object> cinq = new HashMap();
-        cinq.put("name", "5");
-        cinq.put("nbTracks", "5");
-        cinq.put("image", "5");
-        cinq.put("lien", "spotify:album:1VGVJdmvOSRK2w9RKXk18A");
-
-        HashMap<String, Object> six = new HashMap();
-        six.put("name", "6");
-        six.put("nbTracks", "6");
-        six.put("image", "6");
-        six.put("lien", "spotify:album:4L3cV9CUK0MVXUXLYkWY23");
-
-        HashMap<String, Object> sept = new HashMap();
-        sept.put("name", "7");
-        sept.put("nbTracks", "7");
-        sept.put("image", "7");
-        sept.put("lien", "spotify:album:3j8Mg3DogmEVXNYrHbDWeX");
-
-        infoPlatlists.add(un);
-        infoPlatlists.add(deux);
-        infoPlatlists.add(trois);
-        infoPlatlists.add(quatre);
-        infoPlatlists.add(cinq);
-        infoPlatlists.add(six);
-        infoPlatlists.add(sept);
+        //Boucle a travers playlistes et met dans les hashmap à l'aide des objets
+        infoPlatlists = new Vector<>();
+        for (Playlist playlist:playlists) {
+            infoPlatlists.add(
+                    new HashMap(){{
+                        put("name", playlist.nom);
+                        put("nbTracks", playlist.nbChansons);
+                        put("image", playlist.image);
+                        put("duree", playlist.duree);
+                        put("lien", playlist.lien);
+                    }}
+            );
+        }
 
         adapteurListe = new SimpleAdapter(
                 this,
                 infoPlatlists,
                 R.layout.layout_playlist,
-                new String[]{"lien"},
-                new int[]{R.id.nomPlaylist}
+                new String[]{"name", "duree", "nbTracks", "image"},
+                new int[]{R.id.nomPlaylist, R.id.duréePlaylist, R.id.nbChansons, R.id.imagePlaylist}
         );
 
         listPlaylists.setAdapter(adapteurListe);
-
-        for(int childIndex = 0; childIndex < listPlaylists.getChildCount(); childIndex++){
-            listPlaylists.getChildAt(childIndex).setOnClickListener(ec);
-        }
+        listPlaylists.setOnItemClickListener(ec);
     }
-    private class Ecouteur implements View.OnClickListener {
+    private class Ecouteur implements AdapterView.OnItemClickListener {
         @Override
-        public void onClick(View v) {
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             intent = new Intent();
-            choix = String.valueOf(v.getClass());
-            intent.putExtra("user",choix);
+            choix = (String) infoPlatlists.get(position).get("lien");
+            intent.putExtra("lien", choix);
             setResult(RESULT_OK, intent);
             finish();
+
         }
     }
 

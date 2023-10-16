@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageView skipForward;
 
     private long tempsPause = 0;
-    private boolean asCommence = false;
     private TextView lienSite;
     private ImageView pagePlaylists;
     private androidx.activity.result.ActivityResultLauncher<Intent> launcher;
@@ -57,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         chrono.start(); //Afin de faire que onChronometerTick commence à être appelé
 
+        //Ticks
         chrono.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 chronometer.setOnChronometerTickListener(this);
             }
         });
+        //Play et pause
         boutonPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,25 +77,28 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else{
                     instance.play();
-                    chrono.setBase(SystemClock.elapsedRealtime() + tempsPause);
-                    chrono.start();
+                    if (!chrono.isActivated()){ //Si une chanson n'est pas déja en train de jouer
+                        chrono.setBase(SystemClock.elapsedRealtime() + tempsPause);
+                        chrono.start();
+                    }
                 }
             }
         });
+
+        //Changement chanson
         skipBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 instance.previousSong();
-                resetChrono();
             }
         });
         skipForward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 instance.nextSong();
-                resetChrono();
             }
         });
+        //Mouvement barre progress
         tempsChanson.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -106,10 +110,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                instance.move(seekBar.getProgress()); //Marche pas, peut être besoin de premium pour bouger
+                //instance.move(seekBar.getProgress()); //Marche pas, peut être besoin de premium pour bouger
+                seekBar.setProgress((int) instance.getSongProgress());
             }
         });
 
+        //Lien exterieur
         lienSite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,11 +125,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Partie boomerang
         launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
                 if (result.getResultCode() == RESULT_OK){
-                    //instance.setPlaylist = result.getData().getSerializableExtra("choix");
+                    instance.setActivePlaylist((String) result.getData().getSerializableExtra("lien"));
                 }
             }
         });
@@ -137,20 +144,12 @@ public class MainActivity extends AppCompatActivity {
     private void updateInfo(){
         if (instance.isConnected()){
             instance.updateInfo();
-            if (asCommence){
-                if (instance.songChanged()){ //Verfie si la chanson as été changée il y as peu
-                    newSong();
-                    instance.resetSongChanged(); //Dit a SpotifyDiffuseur que le changement de chanson à été pris en compte
-                }
-                updateSeekBar();
+            if (instance.songChanged()){ //Verfie si la chanson as été changée il y as peu
+                newSong();
+                instance.resetSongChanged(); //Dit a SpotifyDiffuseur que le changement de chanson à été pris en compte
             }
-            else {
-                openApp();
-            }
+            updateSeekBar(); //Ajoute la seconde qui est passée
         }
-    }
-    private void resetChrono(){
-        chrono.setBase(SystemClock.elapsedRealtime());
     }
     private void afficherInfoBase(){
         nomChanson.setText(instance.getNomChanson());
@@ -158,24 +157,18 @@ public class MainActivity extends AppCompatActivity {
         imageChanson.setImageBitmap(instance.getCouvertureChanson());
     }
     private void updateSeekBar(){
-        tempsChanson.setProgress((int) instance.getSongProgress());
+        tempsChanson.setProgress(tempsChanson.getProgress() + 1000);
     }
-    //Est appelé apres un changement de chanson
+    //Est appelé après un changement de chanson
     private void newSong(){
         afficherInfoBase();
         tempsChanson.setMax((int) instance.getSongLenght());
-        resetChrono();
+        //Met pas a zero au cas ou une chanson jouais déja a ouverture de l'app ou changement de playlist
+        setChrono();
+        tempsChanson.setProgress((int) instance.getSongProgress());
     }
     //Met le temps sur le chronometre égal au progress de la chanson
     private void setChrono() {
         chrono.setBase(SystemClock.elapsedRealtime() - instance.getSongProgress());
-    }
-
-    //Est appelé une fois à l'ouverture de l'aplication afin d'afficher les informations au cas ou de la musique jouais déja
-    private void openApp(){
-        afficherInfoBase();
-        tempsChanson.setMax((int) instance.getSongLenght());
-        setChrono();
-        asCommence = true;
     }
 }

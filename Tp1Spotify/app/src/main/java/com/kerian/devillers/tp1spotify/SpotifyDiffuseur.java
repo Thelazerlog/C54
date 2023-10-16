@@ -30,7 +30,7 @@ public class SpotifyDiffuseur{
 
     private boolean connected = false; //Si la connection a spotify est établie
 
-    private String curSong; //Uri de la chanson en train de jouer
+    private String curSong = "aucune"; //Uri de la chanson en train de jouer
     private boolean isPlaying = false; //Si une chanson est en train de jouer
 
     private String activePlaylist = "spotify:playlist:37i9dQZF1DWYMokBiQj5qF";
@@ -84,8 +84,8 @@ public class SpotifyDiffuseur{
     }
     public void move(int postion){ //Change le progress de la chason à la position donnée en miliseconds
         this.updateInfo();
-        songProgress = postion;
         playerApi.seekTo(postion);
+        songProgress = postion;
     }
     public boolean isPlaying(){
         return isPlaying;
@@ -96,23 +96,22 @@ public class SpotifyDiffuseur{
         playerApi.subscribeToPlayerState().setEventCallback(playerState -> {
             final Track track = playerState.track;
             if (track != null) {
-                nom = track.name;
-                artiste = track.artist.name;
-                appRemote.getImagesApi().getImage(track.imageUri).setResultCallback(
-                        new CallResult.ResultCallback<Bitmap>() {
-                            @Override
-                            public void onResult(Bitmap data) {
-                                image = data;
-                            }
-                        }
-                );
-                songLenght = track.duration;
-                songProgress = playerState.playbackPosition;
-
                 if (!playerState.track.uri.equals(curSong) && curSong != null){ //Verifie si la chanson qui joue est celle qui jouais avant ce tic
+                    nom = track.name;
+                    artiste = track.artist.name;
+                    appRemote.getImagesApi().getImage(track.imageUri).setResultCallback(
+                            new CallResult.ResultCallback<Bitmap>() {
+                                @Override
+                                public void onResult(Bitmap data) {
+                                    image = data;
+                                }
+                            }
+                    );
+                    songLenght = track.duration;
+                    songProgress = playerState.playbackPosition;
                     songChanged = true;
+                    curSong = playerState.track.uri;
                 }
-                curSong = playerState.track.uri;
             }
         });
     }
@@ -139,13 +138,18 @@ public class SpotifyDiffuseur{
         playerApi.skipPrevious();
     }
     public boolean songChanged(){
-        return songChanged;
+            return songChanged;
     }
     public void resetSongChanged(){
         songChanged = false;
     }
     public boolean isConnected(){
         return connected;
+    }
+
+    public void setActivePlaylist(String activePlaylist) {
+        this.activePlaylist = activePlaylist; //Met la playlise voue comme active
+        this.play();
     }
 }
 
