@@ -18,47 +18,45 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.656" />
+        app:layout_constraintVertical_bias="0.644" />
 
-    <Button
+    <ImageView
         android:id="@+id/bouttonPlay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/coda"
-        android:text="Play"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.855" />
+        app:layout_constraintVertical_bias="0.845"
+        app:srcCompat="@drawable/play" />
 
     <ImageView
         android:id="@+id/skipBack"
-        android:layout_width="24dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="108dp"
-        android:layout_marginBottom="108dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="25dp"
         android:rotation="180"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bouttonPlay"
+        app:layout_constraintTop_toTopOf="@+id/bouttonPlay"
         app:srcCompat="@drawable/skip" />
 
     <ImageView
         android:id="@+id/skipForward"
-        android:layout_width="24dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="276dp"
-        android:layout_marginBottom="108dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="22dp"
+        app:layout_constraintStart_toEndOf="@+id/bouttonPlay"
+        app:layout_constraintTop_toTopOf="@+id/bouttonPlay"
         app:srcCompat="@drawable/skip" />
 
     <TextView
         android:id="@+id/nomArtiste"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="184dp"
+        android:layout_marginBottom="188dp"
         android:fontFamily="@font/coda"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -111,8 +109,8 @@
 
     <ImageView
         android:id="@+id/pagePlaylists"
-        android:layout_width="40dp"
-        android:layout_height="34dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/playlists" />

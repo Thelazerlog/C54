@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     private static SpotifyDiffuseur instance;
-    private Button boutonPlay;
+    private ImageView boutonPlay;
     private TextView nomChanson;
     private TextView nomArtiste;
     private ImageView imageChanson;
@@ -149,13 +149,14 @@ public class MainActivity extends AppCompatActivity {
         //chrono.setBase(SystemClock.elapsedRealtime() + tempsPause);
         chrono.setBase(SystemClock.elapsedRealtime() - instance.getSongProgress());
         chrono.start();
-        boutonPlay.setText("Pause");
+        boutonPlay.setImageDrawable(getDrawable(R.drawable.pause));
     }
     private void pause() {
         instance.pause();
         chrono.stop();
         //tempsPause = chrono.getBase() - SystemClock.elapsedRealtime();
-        boutonPlay.setText("Play");
+        boutonPlay.setImageDrawable(getDrawable(R.drawable.play));
+
     }
     private void updateInfo(){
         if (instance.isConnected()){

@@ -25,11 +25,25 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/titreNb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Nombre de chansons:" />
+
+        <TextView
             android:id="@+id/nbChansons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="TextView" />
+
+        <TextView
+            android:id="@+id/titreDuree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Durée (min):" />
 
         <TextView
             android:id="@+id/duréePlaylist"
