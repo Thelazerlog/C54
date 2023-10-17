@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView lienSite;
     private ImageView pagePlaylists;
     private androidx.activity.result.ActivityResultLauncher<Intent> launcher;
+    private boolean reload = true; //Est true li il y as besoin de mettre a jour les infos de la chanson
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,15 +67,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (instance.isPlaying()){
-                    instance.pause();
-                    chrono.stop();
-                    //tempsPause = chrono.getBase() - SystemClock.elapsedRealtime();
+                    pause();
                 }
                 else{
-                    instance.play();
-                    //chrono.setBase(SystemClock.elapsedRealtime() + tempsPause);
-                    chrono.setBase(SystemClock.elapsedRealtime() - instance.getSongProgress());
-                    chrono.start();
+                    play();
                 }
             }
         });
@@ -136,16 +132,37 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     @Override
+    public void onResume() {
+        super.onResume();
+        if (instance.isConnected()){
+            reload = true;
+            play();
+        }
+    }
+    @Override
     public void onStop() {
         super.onStop();
-        instance.pause();
+        pause();
     }
-
+    private void play() {
+        instance.play();
+        //chrono.setBase(SystemClock.elapsedRealtime() + tempsPause);
+        chrono.setBase(SystemClock.elapsedRealtime() - instance.getSongProgress());
+        chrono.start();
+        boutonPlay.setText("Pause");
+    }
+    private void pause() {
+        instance.pause();
+        chrono.stop();
+        //tempsPause = chrono.getBase() - SystemClock.elapsedRealtime();
+        boutonPlay.setText("Play");
+    }
     private void updateInfo(){
         if (instance.isConnected()){
             instance.updateInfo();
-            if (instance.songChanged()){ //Verfie si la chanson as été changée il y as peu
+            if (instance.songChanged() || reload == true){ //Verfie si la chanson as été changée il y as peu
                 newSong();
+                reload = false;
                 instance.resetSongChanged(); //Dit a SpotifyDiffuseur que le changement de chanson à été pris en compte
             }
             updateSeekBar(); //Ajoute la seconde qui est passée
