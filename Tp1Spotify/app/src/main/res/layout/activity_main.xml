@@ -39,10 +39,10 @@
         android:layout_height="25dp"
         android:layout_marginStart="108dp"
         android:layout_marginBottom="108dp"
-        android:rotation="90"
+        android:rotation="180"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/arrow_down_float" />
+        app:srcCompat="@drawable/skip" />
 
     <ImageView
         android:id="@+id/skipForward"
@@ -50,10 +50,9 @@
         android:layout_height="25dp"
         android:layout_marginStart="276dp"
         android:layout_marginBottom="108dp"
-        android:rotation="270"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/arrow_down_float" />
+        app:srcCompat="@drawable/skip" />
 
     <TextView
         android:id="@+id/nomArtiste"
